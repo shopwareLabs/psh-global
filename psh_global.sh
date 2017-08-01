@@ -1,13 +1,34 @@
-#!/bin/sh
+#!/bin/bash
 
-function upsearch {
+upsearch () {
   slashes=${PWD//[^\/]/}
   directory="$PWD"
-  for (( n=${#slashes}; n>0; --n ))
+  n = 1
+  while [[ "$n" -le 2 ]]
   do
-    test -x "$directory/$1" && cd "$directory" && ./$1 $2 && return 
+    # Cancel if the directory to search in does not exist
+    if [[ ! -d "$directory" ]]
+    then
+      return 0
+    fi
+    
+    # Check is this really is a file
+    if [[ -f "$directory/$1" ]]
+    then
+      # Check if the file is executable
+      if [[ -x "$directory/$1" ]]
+      then
+        cd "$directory" 
+        ./$1 $2 
+        return 1
+      else
+        echo "$directory/$1 is not executable. Check the permissions."
+        return 1
+      fi
+    fi
     directory="$directory/.."
   done
 }
 
-upsearch psh.phar $1
+result=$(upsearch psh.phar $1)
+[ "$result" == "0" ]  upsearch psh $1
