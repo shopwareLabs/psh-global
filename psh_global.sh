@@ -31,4 +31,4 @@ upsearch () {
 }
 
 result=$(upsearch psh.phar $1)
-[ "$result" == "0" ]  upsearch psh $1
+[ "$result" == "0" ] && upsearch psh $1
