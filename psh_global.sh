@@ -3,7 +3,7 @@
 upsearch () {
   slashes=${PWD//[^\/]/}
   directory="$PWD"
-  n = 1
+  n=1
   while [[ "$n" -le 2 ]]
   do
     # Cancel if the directory to search in does not exist
@@ -20,15 +20,14 @@ upsearch () {
       then
         cd "$directory" 
         ./$1 $2 
-        return 1
+        return
       else
         echo "$directory/$1 is not executable. Check the permissions."
-        return 1
+        return
       fi
     fi
     directory="$directory/.."
   done
 }
 
-result=$(upsearch psh.phar $1)
-[ "$result" == "0" ] && upsearch psh $1
+upsearch psh.phar $1
